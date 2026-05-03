@@ -3,9 +3,18 @@ import re
 
 # Define patterns to search for
 patterns = {
-    "AWS Access Key": r"AKIA[0-9A-Z]{16}",
-    "Generic API Key": r"(api_key|token|secret)[=: ]+[A-Za-z0-9]+",
-    "Email": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}"
+    "AWS Access Key": {
+        "regex": r"AKIA[0-9A-Z]{16}",
+        "severity": "HIGH"
+    },
+    "Generic API Key": {
+        "regex": r"(api_key|token|secret)[=: ]+[A-Za-z0-9]+",
+        "severity": "MEDIUM"
+    },
+    "Email": {
+        "regex": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}",
+        "severity": "LOW"
+    }
 }
 
 def scan_file(filepath):
@@ -14,11 +23,12 @@ def scan_file(filepath):
     try:
         with open(filepath, "r", errors="ignore") as file:
             for line_number, line in enumerate(file, 1):
-                for name, pattern in patterns.items():
-                    matches = re.findall(pattern, line)
+                for name, details in patterns.items():
+                    matches = re.findall(details["regex"], line)
                     if matches:
                         findings.append({
                             "type": name,
+                            "severity": details["severity"],
                             "line": line_number,
                             "content": line.strip()
                         })
@@ -49,8 +59,12 @@ if __name__ == "__main__":
     findings = scan_directory(".")
 
     if findings:
-        for f in findings:
-            print(f"[{f['type']}] Found in {f['file']} (Line {f['line']}):")
-            print(f"    {f['content']}\n")
+        with open("findings.txt", "w") as output:
+            for f in findings:
+                line = f"[{f['severity']}] {f['type']} found in {f['file']} (Line {f['line']}): {f['content']}\n"
+                print(line)
+                output.write(line)
+
+        print("\n📄 Findings saved to findings.txt")
     else:
         print("✅ No secrets found.")
