@@ -32,6 +32,8 @@ def scan_directory(directory):
     all_findings = []
 
     for root, dirs, files in os.walk(directory):
+        # Exclude .git directory
+        dirs[:] = [d for d in dirs if d != ".git"]
         for file in files:
             filepath = os.path.join(root, file)
             results = scan_file(filepath)
