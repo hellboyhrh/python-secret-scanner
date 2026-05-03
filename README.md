@@ -28,3 +28,13 @@ The first version of the scanner also scanned the `.git` directory, which result
 The scanner was updated to exclude the `.git` directory from scanning.
 
 This significantly reduced noise and improved the accuracy of results, aligning with real-world security tool behavior.
+
+## 📊 Output and Severity Levels
+
+The scanner categorizes findings based on severity:
+
+- HIGH → Critical secrets (e.g., AWS keys)
+- MEDIUM → Potential sensitive data (API keys, tokens)
+- LOW → Informational (emails)
+
+Results are printed to the terminal and saved to `findings.txt` for further analysis.
