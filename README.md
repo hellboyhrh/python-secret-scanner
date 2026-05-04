@@ -1,3 +1,13 @@
+## Project Summary
+
+This project is a Python-based secret scanner that uses regular expressions to detect potential sensitive data exposure in local files.
+
+It supports:
+- Custom scan paths
+- Custom output files
+- Severity-based findings
+- Exclusion of `.git` directories to reduce false positives
+
 ## 🔍 How the Scanner Works
 
 This tool scans files in the current directory to identify potential sensitive data exposure using regex pattern matching.
