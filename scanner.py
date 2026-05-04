@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 
 # Define patterns to search for
 patterns = {
@@ -55,8 +56,13 @@ def scan_directory(directory):
 
 
 if __name__ == "__main__":
-    print("🔍 Scanning for secrets...\n")
-    findings = scan_directory(".")
+    target_directory = "."
+
+    if len(sys.argv) > 1:
+        target_directory = sys.argv[1]
+
+    print(f"🔍 Scanning for secrets in: {target_directory}\n")
+    findings = scan_directory(target_directory)
 
     if findings:
         with open("findings.txt", "w") as output:
