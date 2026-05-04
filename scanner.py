@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import argparse
 
 # Define patterns to search for
 patterns = {
@@ -56,21 +57,35 @@ def scan_directory(directory):
 
 
 if __name__ == "__main__":
-    target_directory = "."
+    parser = argparse.ArgumentParser(description="Simple Secret Scanner")
 
-    if len(sys.argv) > 1:
-        target_directory = sys.argv[1]
+    parser.add_argument(
+        "--path",
+        type=str,
+        default=".",
+        help="Directory to scan"
+    )
 
-    print(f"🔍 Scanning for secrets in: {target_directory}\n")
-    findings = scan_directory(target_directory)
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="findings.txt",
+        help="Output file name"
+    )
+
+    args = parser.parse_args()
+
+    print(f"🔍 Scanning for secrets in: {args.path}\n")
+
+    findings = scan_directory(args.path)
 
     if findings:
-        with open("findings.txt", "w") as output:
+        with open(args.output, "w") as output:
             for f in findings:
                 line = f"[{f['severity']}] {f['type']} found in {f['file']} (Line {f['line']}): {f['content']}\n"
                 print(line)
                 output.write(line)
 
-        print("\n📄 Findings saved to findings.txt")
+        print(f"\n📄 Findings saved to {args.output}")
     else:
         print("✅ No secrets found.")
