@@ -38,3 +38,8 @@ The scanner categorizes findings based on severity:
 - LOW → Informational (emails)
 
 Results are printed to the terminal and saved to `findings.txt` for further analysis.
+
+## Upgraded into specifying a folder to scan
+
+can specify the folder the scan on the CLI in the following format 
+python3 scanner.py <folder-to-scan>
